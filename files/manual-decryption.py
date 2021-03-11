@@ -41,5 +41,6 @@ icv_numerique=struct.unpack('!L', icv_enclair)
 text_enclair=cleartext[:-4]
 
 print ('Text: ' + text_enclair.hex())
+print ('Text: ', text_enclair)
 print ('icv:  ' + icv_enclair.hex())
 print ('icv(num): ' + str(icv_numerique))
