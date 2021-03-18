@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" Manually decrypt a wep message given the WEP key"""
+""" Manually encrypt a wep fragmented message given the WEP key"""
 
-__author__      = "Abraham Rubinstein"
-__copyright__   = "Copyright 2017, HEIG-VD"
+__author__      = "Julien Béguin & Gwendoline Dössegger"
+__copyright__   = "Copyright 2021, HEIG-VD"
 __license__ 	= "GPL"
 __version__ 	= "1.0"
-__email__ 		= "abraham.rubinstein@heig-vd.ch"
 __status__ 		= "Prototype"
 
 from scapy.all import *
-import binascii
 from rc4 import RC4
 import zlib
 
@@ -21,9 +19,10 @@ payloads = [
     b"\x06\x04\x00\x01\x90'\xe4\xeaa\xf2\xc0\xa8",
     b"\x01d\x00\x00\x00\x00\x00\x00\xc0\xa8\x01\xff",
 ]
-nb_frag = 3
 packets = []
 
+# Cut package in 3 fragments
+nb_frag = 3
 for i in range(nb_frag):
     # Read initial package
     arp = rdpcap('arp.cap')[0]
@@ -35,11 +34,11 @@ for i in range(nb_frag):
     # Set fragmented payloads
     plaintext = payloads[i]
 
-    # Set "more_fragments" flag
+    # Set "more_fragments" flag. If the current package is the last fragment, keep "more_fragments to 0". Else, set to 1.
     if i != nb_frag - 1:
         arp.FCfield |= 0b100
 
-    # Set fragment number field
+    # Set fragment number
     arp.SC = i
 
     # Reset payload size. It'll be re-calculated when writing the package
@@ -57,7 +56,7 @@ for i in range(nb_frag):
     arp.icv = struct.unpack('!L', ciphertext[-4:])[0]
     arp.iv = iv
 
-    arp.show()
+    # Add package to package list
     packets.append(arp)
 
 # Writing package to .pcap file

@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-""" Manually decrypt a wep message given the WEP key"""
+""" Manually encrypt a wep message given the WEP key"""
 
-__author__      = "Abraham Rubinstein"
-__copyright__   = "Copyright 2017, HEIG-VD"
+__author__      = "Julien Béguin & Gwendoline Dössegger"
+__copyright__   = "Copyright 2021, HEIG-VD"
 __license__ 	= "GPL"
 __version__ 	= "1.0"
-__email__ 		= "abraham.rubinstein@heig-vd.ch"
 __status__ 		= "Prototype"
 
 from scapy.all import *
-import binascii
 from rc4 import RC4
 import zlib
 
